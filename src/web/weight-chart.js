@@ -91,6 +91,19 @@ function renderChart(data, range) {
     const weights = filteredData.map(item => item.weight)
     const bmis = filteredData.map(item => parseFloat(item.bmi))
 
+    // 创建趋势线数据
+    // 使用完整的数据点而不是只有首尾的空数组
+    const trendLineData = []
+    if (dates.length > 1) {
+        // 只保留首尾两个点的数据
+        const first = weights[0]
+        const last = weights[weights.length - 1]
+
+        // 直接使用两点构建趋势线
+        trendLineData.push({ x: dates[0], y: first })
+        trendLineData.push({ x: dates[dates.length - 1], y: last })
+    }
+
     // 获取canvas元素
     const ctx = document.getElementById('weightChart').getContext('2d')
 
@@ -125,6 +138,25 @@ function renderChart(data, range) {
                     tension: 0.2,
                     yAxisID: 'y1',
                     hidden: true, // 默认隐藏BMI数据，用户可以选择显示
+                },
+                {
+                    label: '趋势线',
+                    data:
+                        trendLineData.length > 0
+                            ? [
+                                  { x: dates[0], y: trendLineData[0].y },
+                                  { x: dates[dates.length - 1], y: trendLineData[1].y },
+                              ]
+                            : [],
+                    borderColor: '#e67e22', // 橙色
+                    borderWidth: 2,
+                    borderDash: [5, 5], // 虚线样式
+                    fill: false,
+                    tension: 0, // 直线
+                    pointRadius: [4, 4], // 显示首尾两个点
+                    pointBackgroundColor: '#e67e22',
+                    yAxisID: 'y',
+                    showLine: true, // 确保线条显示
                 },
             ],
         },
