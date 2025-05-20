@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体重数据管理系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .menu-item:hover {
+            background-color: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-icon {
+            background-color: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .menu-content {
+            flex: 1;
+        }
+
+        .menu-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .menu-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>体重数据管理系统</h1>
+
+        <div class="menu">
+            <a href="src/web/weight-trend.html" class="menu-item">
+                <div class="menu-icon">📊</div>
+                <div class="menu-content">
+                    <div class="menu-title">体重趋势可视化</div>
+                    <div class="menu-description">查看您的体重变化趋势、统计数据和分析</div>
+                </div>
+            </a>
+
+            <div class="menu-item" onclick="runScript('convert')">
+                <div class="menu-icon">🔄</div>
+                <div class="menu-content">
+                    <div class="menu-title">CSV转换为JSON</div>
+                    <div class="menu-description">将原始CSV数据转换为JSON格式</div>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="runScript('filter')">
+                <div class="menu-icon">🔍</div>
+                <div class="menu-content">
+                    <div class="menu-title">过滤早晨数据</div>
+                    <div class="menu-description">筛选每天早上7-9点最轻的记录</div>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="runScript('start')">
+                <div class="menu-icon">▶️</div>
+                <div class="menu-content">
+                    <div class="menu-title">完整处理流程</div>
+                    <div class="menu-description">执行全部数据处理步骤并查看可视化</div>
+                </div>
+            </div>
+
+            <a href="README.md" class="menu-item" target="_blank">
+                <div class="menu-icon">📖</div>
+                <div class="menu-content">
+                    <div class="menu-title">项目文档</div>
+                    <div class="menu-description">查看项目说明、使用方法和技术文档</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>注意：某些功能需要在命令行中执行，点击后会显示相应的执行命令。</p>
+            <p>数据处理状态：<span id="status">就绪</span></p>
+        </div>
+    </div>
+
+    <script>
+        function runScript(type) {
+            const commands = {
+                'convert': 'node src/scripts/processWeightToJson.js',
+                'filter': 'node src/scripts/filterMorningWeight.js',
+                'start': './start.sh'
+            };
+
+            const command = commands[type];
+            if (!command) return;
+
+            alert(`要执行此操作，请在命令行中运行以下命令：\n\n${command}\n\n或者使用npm命令：\nnpm run ${type}`);
+            document.getElementById('status').textContent = '等待执行...';
+        }
+    </script>
+</body>
+
+</html>
